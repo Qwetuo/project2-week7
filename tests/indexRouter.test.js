@@ -3,9 +3,9 @@ const express = require("express");
 
 const indexRouter = require("../routes/indexRouter");
 
-const { MongoMemoryServer } = require("mongodb-memory-server");
-const mongod = new MongoMemoryServer();
-const mongoose = require("mongoose");
+// const { MongoMemoryServer } = require("mongodb-memory-server");
+// const mongod = new MongoMemoryServer();
+// const mongoose = require("mongoose");
 
 const app = express();
 indexRouter(app);

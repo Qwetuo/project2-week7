@@ -6,6 +6,7 @@ const Admin = require("../models/admin");
 const { jwtOptions } = require("../config/passport");
 
 const router = express.Router();
+router.use(express.json())
 
 // router.use('/api-docs', swaggerUi.server,
 // swaggerUi.setup(swaggerDocument))
@@ -51,5 +52,6 @@ router.post("/signin", async (req, res) => {
 });
 
 module.exports = app => {
-  app.use("/",router)
+  // app.use(express.json())
+  app.use("/", router)
 }
