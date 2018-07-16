@@ -1,0 +1,249 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Lendar API Documentation - ALL KIV"
+  },
+  "servers": [
+    {
+      "url": "https://lendar-api.herokuapp.com"
+    }
+  ],
+  "paths": {
+    "/all": {
+      "get": {
+        "summary": "List all datasets available on data.gov.sg",
+        "tags": [
+          "all"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of datasets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "example": {
+                      "organisation": "GovTech",
+                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
+                      "dataset_name": "Data.gov.sg Dataset Listing",
+                      "date_created": "2017-04-03",
+                      "last_updated": "2018-07-02",
+                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
+                      "frequency": "Daily",
+                      "coverage_start": "2018-07-01",
+                      "coverage_end": "2018-07-01",
+                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
+                      "resource_name": "Data.gov.sg Dataset Listing",
+                      "resource_description": "na",
+                      "resource_format": "CSV"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/all/search": {
+      "get": {
+        "summary": "Query for specific format and frequency",
+        "tags": [
+          "all"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "The format of the dataset to retrieve.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "API",
+                "CSV",
+                "KML",
+                "PDF",
+                "SHP"
+              ]
+            }
+          },
+          {
+            "name": "freq",
+            "in": "query",
+            "required": false,
+            "description": "The update frequency of the dataset to retrieve. Use one of these: Adhoc, Annual, Daily, Half Year, Monthly, Other, Quarterly, Realtime, Weekly",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Adhoc",
+                "Annual",
+                "Daily",
+                "Half Year",
+                "Monthly",
+                "Other",
+                "Quarterly",
+                "Realtime",
+                "Weekly"
+              ]
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "The dataset_name to retrieve. E.g. Bus, Carpark",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of datasets that match the query search",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "example": {
+                      "organisation": "GovTech",
+                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
+                      "dataset_name": "Data.gov.sg Dataset Listing",
+                      "date_created": "2017-04-03",
+                      "last_updated": "2018-07-02",
+                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
+                      "frequency": "Daily",
+                      "coverage_start": "2018-07-01",
+                      "coverage_end": "2018-07-01",
+                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
+                      "resource_name": "Data.gov.sg Dataset Listing",
+                      "resource_description": "na",
+                      "resource_format": "CSV"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/format/{format}": {
+      "get": {
+        "summary": "List all datasets with specific format",
+        "tags": [
+          "format"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "path",
+            "required": true,
+            "description": "The format of the dataset to retrieve.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "API",
+                "CSV",
+                "KML",
+                "PDF",
+                "SHP"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of datasets with specified format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "example": {
+                      "organisation": "GovTech",
+                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
+                      "dataset_name": "Data.gov.sg Dataset Listing",
+                      "date_created": "2017-04-03",
+                      "last_updated": "2018-07-02",
+                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
+                      "frequency": "Daily",
+                      "coverage_start": "2018-07-01",
+                      "coverage_end": "2018-07-01",
+                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
+                      "resource_name": "Data.gov.sg Dataset Listing",
+                      "resource_description": "na",
+                      "resource_format": "CSV"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/freq/{freq}": {
+      "get": {
+        "summary": "List all datasets with specific frequency",
+        "tags": [
+          "frequency"
+        ],
+        "parameters": [
+          {
+            "name": "freq",
+            "in": "path",
+            "required": true,
+            "description": "The frequency of the dataset to retrieve.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Adhoc",
+                "Annual",
+                "Daily",
+                "Half Year",
+                "Monthly",
+                "Other",
+                "Quarterly",
+                "Realtime",
+                "Weekly"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of datasets with specified frequency",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "example": {
+                      "organisation": "GovTech",
+                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
+                      "dataset_name": "Data.gov.sg Dataset Listing",
+                      "date_created": "2017-04-03",
+                      "last_updated": "2018-07-02",
+                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
+                      "frequency": "Daily",
+                      "coverage_start": "2018-07-01",
+                      "coverage_end": "2018-07-01",
+                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
+                      "resource_name": "Data.gov.sg Dataset Listing",
+                      "resource_description": "na",
+                      "resource_format": "CSV"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
