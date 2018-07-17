@@ -6,6 +6,9 @@ const bodyParser = require("body-parser");
 const indexRouter = require("./routes/indexRouter");
 const AdminSecretRouter = require("./routes/adminSecretRouter");
 const adminRouter = require("./routes/adminRouter")
+const employeeRouter = require("./routes/employeeRouter")
+const signupRouter = require("./routes/signupRouter")
+const signinRouter = require("./routes/signinRouter")
 
 const { passport } = require("./config/passport");
 const { handle404, handle500 } = require("./middlewares/error_handlers");
@@ -19,6 +22,9 @@ app.use(passport.initialize());
 indexRouter(app);
 adminRouter(app)
 AdminSecretRouter(app)
+employeeRouter(app)
+signupRouter(app)
+signinRouter(app)
 
 // app.use(
 //   "/adminSec",
