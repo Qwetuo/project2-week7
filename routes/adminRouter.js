@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
 
 router.post("/signup", async (req, res, next) => {
   const { username, password } = req.body;
-  const user = new Admin({ username, bio: "some bio" });
+  const user = new Admin({ username, bio: "admin" });
   user.setPassword(password);
   try {
     await user.save();

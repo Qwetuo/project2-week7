@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const crypto = require("crypto");
-const uniqueValidator = require("mongoose-unique-validator");
 
 const PostingSchema = new mongoose.Schema(
   {

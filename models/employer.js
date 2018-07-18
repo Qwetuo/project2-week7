@@ -12,6 +12,7 @@ const EmployerSchema = new mongoose.Schema(
       match: [/^[a-zA-Z0-9]+$/, "is invalid"],
       index: true
     },
+    name: String,
     email: String,
     mobile: String,
     coyName: String,

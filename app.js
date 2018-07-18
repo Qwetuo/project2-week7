@@ -7,11 +7,13 @@ const indexRouter = require("./routes/indexRouter");
 const AdminSecretRouter = require("./routes/adminSecretRouter");
 const adminRouter = require("./routes/adminRouter")
 const employeeRouter = require("./routes/employeeRouter")
+const employerRouter = require("./routes/employerRouter")
 const signupRouter = require("./routes/signupRouter")
 const signinRouter = require("./routes/signinRouter")
 
 const { passport } = require("./config/passport");
 const { handle404, handle500 } = require("./middlewares/error_handlers");
+
 
 const app = express();
 app.use(morgan("dev"));
@@ -20,9 +22,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 indexRouter(app);
-adminRouter(app)
+// adminRouter(app)
 AdminSecretRouter(app)
 employeeRouter(app)
+employerRouter(app)
 signupRouter(app)
 signinRouter(app)
 

@@ -4,6 +4,8 @@ const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 
 const Admin = require("../models/admin");
+const Employee = require("../models/employee");
+const Employer = require("../models/employer");
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -13,7 +15,10 @@ const jwtOptions = {
 const jwtStrategy = new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
   console.log("payload received", jwt_payload);
 
-  const user = await Admin.findOne({ _id: jwt_payload.id });
+  let user = await Employee.findOne({ _id: jwt_payload.id });
+  if (!user) {user = await Employer.findOne({ _id: jwt_payload.id })}
+  if (!user) {user = await Admin.findOne({ _id: jwt_payload.id })}
+
   if (user) {
     done(null, user);
   } else {
