@@ -102,6 +102,7 @@ test("GET /posts/:id should show the job posting with correct id", async () => {
   expect(response.body._id).toEqual(jobId1);
 });
 
+
 test("PUT /posts/:id should update job posting", async () => {
   const response = await request(app)
     .put(`/employer/posts/${jobId1.replace(/['"]+/g, "")}`)
@@ -117,6 +118,8 @@ test("PUT /posts/:id should update job posting", async () => {
   expect(posting.pay).toEqual(100);
   expect(posting.desc).toEqual("updated description");
 });
+
+
 
 test("DELETE /posts/:id should delete the job posting", async () => {
   const response = await request(app)

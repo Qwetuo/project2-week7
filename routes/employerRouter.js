@@ -14,12 +14,16 @@ router.get("/", isEmployer, async (req, res, next) => {
 
 router.put("/", isEmployer, async (req, res, next) => {
   await Employer.findByIdAndUpdate(req.user._id, req.body);
-  res.status(200).json({ message: `update for ${req.user.username} successful` });
+  res
+    .status(200)
+    .json({ message: `update for ${req.user.username} successful` });
 });
 
 router.delete("/", isEmployer, async (req, res, next) => {
   await Employer.findByIdAndRemove(req.user._id);
-  res.status(200).json({ message: `delete account for ${req.user.username} successful` });
+  res
+    .status(200)
+    .json({ message: `delete account for ${req.user.username} successful` });
 });
 
 router.post("/posts", isEmployer, async (req, res, next) => {
@@ -52,26 +56,47 @@ router.get("/posts", isEmployer, async (req, res, next) => {
 
 router.get("/posts/:id", isEmployer, async (req, res, next) => {
   const post = await Posting.findById(req.params.id);
-  res.status(200).json(post);
+  if (post === null) {res.status(400).json("job id not found")}
+  if (`${post.employer._id}` === `${req.user._id}`) {
+    res.status(200).json(post);
+  } else {
+    res.status(401).json("Unauthorized");
+  }
 });
 
 router.put("/posts/:id", isEmployer, async (req, res, next) => {
   try {
-    await Posting.findByIdAndUpdate(req.params.id, req.body);
-    res.status(200).json({message: `updated book with id ${req.params.id} sucessfully`})
+    const post = await Posting.findById(req.params.id);
+    if (post === null) {res.status(400).json("job id not found")}
+    if (`${post.employer._id}` === `${req.user._id}`) {
+      await Posting.findByIdAndUpdate(req.params.id, req.body);
+      res
+        .status(200)
+        .json({ message: `updated book with id ${req.params.id} sucessfully` });
+    } else {
+      res.status(401).json("Unauthorized");
+    }
   } catch (e) {
-    next(e)
+    next(e);
   }
-})
+});
 
 router.delete("/posts/:id", isEmployer, async (req, res, next) => {
   try {
-    await Posting.findByIdAndRemove(req.params.id);
-    res.status(200).json({message: `deleted book with id ${req.params.id} sucessfully`})
+    const post = await Posting.findById(req.params.id);
+    if (post === null) {res.status(400).json("job id not found")}
+    if (`${post.employer._id}` === `${req.user._id}`) {
+      await Posting.findByIdAndRemove(req.params.id);
+      res
+        .status(200)
+        .json({ message: `deleted book with id ${req.params.id} sucessfully` });
+    } else {
+      res.status(401).json("Unauthorized");
+    }
   } catch (e) {
-    next(e)
+    next(e);
   }
-})
+});
 
 module.exports = app => {
   app.use(
