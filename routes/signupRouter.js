@@ -37,9 +37,10 @@ router.post("/employee", async (req, res, next) => {
   ) {
     res.status(200).json("User validation failed: username: should be unique");
   } else {
-    const { username, password, email, mobile, citizen, education } = req.body;
+    const { username, name, password, email, mobile, citizen, education } = req.body;
     const employee = new Employee({
       username,
+      name,
       email,
       mobile,
       citizen,

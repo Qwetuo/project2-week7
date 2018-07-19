@@ -64,7 +64,6 @@ test("GET /employee should provide account details of token holder", async () =>
   const response = await request(app)
     .get("/employee")
     .set("Authorization", "Bearer " + jwtTokenEmployee1);
-  console.log(jwtTokenEmployee1);
     expect(response.status).toEqual(200);
     expect(response.body.username).toEqual("employee100");
 });

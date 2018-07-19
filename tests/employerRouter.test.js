@@ -122,3 +122,29 @@ test("GET /posts/:id should show the job posting with correct id", async () => {
   expect(response.status).toEqual(200);
   expect(response.body._id).toEqual(jobId1)
 });
+
+test("PUT /posts/:id should update job posting", async () => {
+  const response = await request(app)
+    .put(`/employer/posts/${jobId1.replace(/['"]+/g, '')}`)
+    .send({pay: "100", desc: "updated description"})
+    .set("Authorization", "Bearer " + jwtTokenEmployer1);
+  expect(response.status).toEqual(200);
+  expect(response.body.message).toEqual(`updated book with id ${jobId1} sucessfully`)
+  const posting = await Posting.findById(jobId1).populate("employer");
+  expect(posting.employer.username).toEqual("employer100");
+  expect(posting.title).toEqual("new job1");
+  expect(posting.pay).toEqual(100)
+  expect(posting.desc).toEqual("updated description")
+});
+
+test("DELETE /posts/:id should delete the job posting", async () => {
+  const response = await request(app)
+    .delete(`/employer/posts/${jobId1.replace(/['"]+/g, '')}`)
+    .set("Authorization", "Bearer " + jwtTokenEmployer1);
+  expect(response.status).toEqual(200);
+  expect(response.body.message).toEqual(`deleted book with id ${jobId1} sucessfully`)
+  const postings = await Posting.find()
+  expect(postings.length).toBe(1)
+  expect(postings[0]._id).not.toBe(jobId1)
+});
+

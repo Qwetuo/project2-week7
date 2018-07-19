@@ -55,6 +55,24 @@ router.get("/posts/:id", isEmployer, async (req, res, next) => {
   res.json(post);
 });
 
+router.put("/posts/:id", isEmployer, async (req, res, next) => {
+  try {
+    await Posting.findByIdAndUpdate(req.params.id, req.body);
+    res.json({message: `updated book with id ${req.params.id} sucessfully`})
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.delete("/posts/:id", isEmployer, async (req, res, next) => {
+  try {
+    await Posting.findByIdAndRemove(req.params.id);
+    res.json({message: `deleted book with id ${req.params.id} sucessfully`})
+  } catch (e) {
+    next(e)
+  }
+})
+
 module.exports = app => {
   app.use(
     "/employer",

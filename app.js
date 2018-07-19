@@ -10,6 +10,7 @@ const employeeRouter = require("./routes/employeeRouter")
 const employerRouter = require("./routes/employerRouter")
 const signupRouter = require("./routes/signupRouter")
 const signinRouter = require("./routes/signinRouter")
+const postsRouter = require("./routes/postsRouter")
 
 const { passport } = require("./config/passport");
 const { handle404, handle500 } = require("./middlewares/error_handlers");
@@ -28,6 +29,7 @@ employeeRouter(app)
 employerRouter(app)
 signupRouter(app)
 signinRouter(app)
+postsRouter(app)
 
 // app.use(
 //   "/adminSec",
