@@ -34,7 +34,7 @@ router.put("/interested/:id", isEmployee, async (req, res, next) => {
   const post = await Posting.findById(req.params.id);
   if (post.interested.indexOf(`${req.user._id}`) >= 0) {
     res
-      .status(200)
+      .status(400)
       .json({ message: `you have already logged your interested` });
   } else {
     await Posting.findByIdAndUpdate(req.params.id, {

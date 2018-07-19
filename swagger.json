@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
-    "title": "Lendar API Documentation - ALL KIV"
+    "title": "Lendar API Documentation"
   },
   "servers": [
     {
@@ -10,34 +10,52 @@
     }
   ],
   "paths": {
-    "/all": {
+    "/posts": {
       "get": {
-        "summary": "List all datasets available on data.gov.sg",
+        "summary": "List all available jobs",
         "tags": [
-          "all"
+          "posts"
         ],
         "responses": {
           "200": {
-            "description": "An array of datasets",
+            "description": "An array of posting",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "example": {
-                      "organisation": "GovTech",
-                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
-                      "dataset_name": "Data.gov.sg Dataset Listing",
-                      "date_created": "2017-04-03",
-                      "last_updated": "2018-07-02",
-                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
-                      "frequency": "Daily",
-                      "coverage_start": "2018-07-01",
-                      "coverage_end": "2018-07-01",
-                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
-                      "resource_name": "Data.gov.sg Dataset Listing",
-                      "resource_description": "na",
-                      "resource_format": "CSV"
+                      "commitment": [
+                        "30072018",
+                        "31072018"
+                      ],
+                      "interested": [
+                        {
+                          "_id": "5b50a5477ff0462a2c989527",
+                          "username": "employee1"
+                        },
+                        {
+                          "_id": "5b50a5477ff0462a2c989528",
+                          "username": "employee2"
+                        }
+                      ],
+                      "applicants": [],
+                      "confirmed": [],
+                      "_id": "5b50a5497ff0462a2c98952a",
+                      "title": "new job1",
+                      "pay": 9,
+                      "desc": "new job 1 desc",
+                      "req": "requirements for job 1",
+                      "location": "east",
+                      "type": "others",
+                      "employer": {
+                        "_id": "5b50a5477ff0462a2c989525",
+                        "coyName": "c1 by employer1"
+                      },
+                      "status": "active",
+                      "createdAt": "2018-07-19T14:50:49.191Z",
+                      "updatedAt": "2018-07-19T14:50:49.191Z",
+                      "__v": 0
                     }
                   }
                 }
@@ -47,54 +65,395 @@
         }
       }
     },
-    "/all/search": {
+    "/posts/search": {
       "get": {
-        "summary": "Query for specific format and frequency",
+        "summary": "Query/Filter jobs",
         "tags": [
-          "all"
+          "posts"
         ],
         "parameters": [
           {
-            "name": "format",
+            "name": "status",
             "in": "query",
             "required": false,
-            "description": "The format of the dataset to retrieve.",
+            "description": "job status",
             "schema": {
               "type": "string",
               "enum": [
-                "API",
-                "CSV",
-                "KML",
-                "PDF",
-                "SHP"
+                "active",
+                "expired",
+                "closed"
               ]
             }
           },
           {
-            "name": "freq",
+            "name": "type",
             "in": "query",
             "required": false,
-            "description": "The update frequency of the dataset to retrieve. Use one of these: Adhoc, Annual, Daily, Half Year, Monthly, Other, Quarterly, Realtime, Weekly",
+            "description": "job type",
             "schema": {
               "type": "string",
               "enum": [
-                "Adhoc",
-                "Annual",
-                "Daily",
-                "Half Year",
-                "Monthly",
-                "Other",
-                "Quarterly",
-                "Realtime",
-                "Weekly"
+                "others",
+                "usher",
+                "kiv"
               ]
             }
           },
           {
-            "name": "name",
+            "name": "min",
             "in": "query",
             "required": false,
-            "description": "The dataset_name to retrieve. E.g. Bus, Carpark",
+            "description": "min pay to filter for",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "employer",
+            "in": "query",
+            "required": false,
+            "description": "search for jobs by specific employer",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "description": "search for jobs at specific locations",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "north",
+                "south",
+                "east",
+                "west",
+                "central"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of jobs that match the query search",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "example": {
+                      "commitment": [
+                        "30072018",
+                        "31072018"
+                      ],
+                      "interested": [
+                        {
+                          "_id": "5b50a5477ff0462a2c989527",
+                          "username": "employee1"
+                        },
+                        {
+                          "_id": "5b50a5477ff0462a2c989528",
+                          "username": "employee2"
+                        }
+                      ],
+                      "applicants": [],
+                      "confirmed": [],
+                      "_id": "5b50a5497ff0462a2c98952a",
+                      "title": "new job1",
+                      "pay": 9,
+                      "desc": "new job 1 desc",
+                      "req": "requirements for job 1",
+                      "location": "east",
+                      "type": "others",
+                      "employer": {
+                        "_id": "5b50a5477ff0462a2c989525",
+                        "coyName": "c1 by employer1"
+                      },
+                      "status": "active",
+                      "createdAt": "2018-07-19T14:50:49.191Z",
+                      "updatedAt": "2018-07-19T14:50:49.191Z",
+                      "__v": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signup/employer": {
+      "post": {
+        "tags": [
+          "signup"
+        ],
+        "summary": "Create employer user",
+        "description": "Creates an account with employer model",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "mobile": {
+                  "type": "string"
+                },
+                "coyName": {
+                  "type": "string"
+                },
+                "UEN": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created employer details"
+          }
+        }
+      }
+    },
+    "/signup/employee": {
+      "post": {
+        "tags": [
+          "signup"
+        ],
+        "summary": "Create employee user",
+        "description": "Creates an account with employee model",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "mobile": {
+                  "type": "string"
+                },
+                "citizen": {
+                  "type": "string"
+                },
+                "education": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created employee details"
+          }
+        }
+      }
+    },
+    "/signin/employer": {
+      "post": {
+        "tags": [
+          "signin"
+        ],
+        "summary": "Logs employer into the system",
+        "description": "",
+        "operationId": "loginEmployer",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "employer token"
+          }
+        }
+      }
+    },
+    "/signin/employee": {
+      "post": {
+        "tags": [
+          "signin"
+        ],
+        "summary": "Logs employee into the system",
+        "description": "",
+        "operationId": "loginEmployee",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "employee token"
+          }
+        }
+      }
+    },
+    "/employer/posts": {
+      "get": {
+        "tags": [
+          "employer"
+        ],
+        "summary": "Get all job posting by employer",
+        "responses": {
+          "200": {
+            "description": "An array of jobs that is created by the employer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "example": {
+                      "commitment": [
+                        "30072018",
+                        "31072018"
+                      ],
+                      "interested": [
+                        {
+                          "_id": "5b50a5477ff0462a2c989527",
+                          "username": "employee1"
+                        },
+                        {
+                          "_id": "5b50a5477ff0462a2c989528",
+                          "username": "employee2"
+                        }
+                      ],
+                      "applicants": [],
+                      "confirmed": [],
+                      "_id": "5b50a5497ff0462a2c98952a",
+                      "title": "new job1",
+                      "pay": 9,
+                      "desc": "new job 1 desc",
+                      "req": "requirements for job 1",
+                      "location": "east",
+                      "type": "others",
+                      "employer": {
+                        "_id": "5b50a5477ff0462a2c989525",
+                        "coyName": "c1 by employer1"
+                      },
+                      "status": "active",
+                      "createdAt": "2018-07-19T14:50:49.191Z",
+                      "updatedAt": "2018-07-19T14:50:49.191Z",
+                      "__v": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "employer"
+        ],
+        "summary": "Create new job post",
+        "description": "",
+        "operationId": "createPost",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "pay": {
+                  "type": "string"
+                },
+                "desc": {
+                  "type": "string"
+                },
+                "req": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "commitment": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "job succesfully created"
+          }
+        }
+      }
+    },
+    "/employer/posts/{id}": {
+      "get": {
+        "summary": "Get post with :id",
+        "tags": [
+          "employer"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "id of the job post",
             "schema": {
               "type": "string"
             }
@@ -102,26 +461,136 @@
         ],
         "responses": {
           "200": {
-            "description": "An array of datasets that match the query search",
+            "description": "A job post with id queried for",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "employer"
+        ],
+        "summary": "Modify post with :id",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "pay": {
+                  "type": "string"
+                },
+                "desc": {
+                  "type": "string"
+                },
+                "req": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "commitment": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "post edited succesfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete post with :id",
+        "tags": [
+          "employer"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "id of the job post to be deleted",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "job deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee/interested": {
+      "get": {
+        "summary": "List all jobs the employee have shown interest in",
+        "tags": [
+          "employee"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of posts which employee is interested in",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "example": {
-                      "organisation": "GovTech",
-                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
-                      "dataset_name": "Data.gov.sg Dataset Listing",
-                      "date_created": "2017-04-03",
-                      "last_updated": "2018-07-02",
-                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
-                      "frequency": "Daily",
-                      "coverage_start": "2018-07-01",
-                      "coverage_end": "2018-07-01",
-                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
-                      "resource_name": "Data.gov.sg Dataset Listing",
-                      "resource_description": "na",
-                      "resource_format": "CSV"
+                      "commitment": [
+                        "30072018",
+                        "31072018"
+                      ],
+                      "interested": [
+                        {
+                          "_id": "5b50a5477ff0462a2c989527",
+                          "username": "employee1"
+                        },
+                        {
+                          "_id": "5b50a5477ff0462a2c989528",
+                          "username": "employee2"
+                        }
+                      ],
+                      "applicants": [],
+                      "confirmed": [],
+                      "_id": "5b50a5497ff0462a2c98952a",
+                      "title": "new job1",
+                      "pay": 9,
+                      "desc": "new job 1 desc",
+                      "req": "requirements for job 1",
+                      "location": "east",
+                      "type": "others",
+                      "employer": {
+                        "_id": "5b50a5477ff0462a2c989525",
+                        "coyName": "c1 by employer1"
+                      },
+                      "status": "active",
+                      "createdAt": "2018-07-19T14:50:49.191Z",
+                      "updatedAt": "2018-07-19T14:50:49.191Z",
+                      "__v": 0
                     }
                   }
                 }
@@ -131,116 +600,26 @@
         }
       }
     },
-    "/format/{format}": {
-      "get": {
-        "summary": "List all datasets with specific format",
+    "/employee/interested/{id}": {
+      "put": {
+        "summary": "Add employee to interested list in job post with :id",
         "tags": [
-          "format"
+          "employee"
         ],
         "parameters": [
           {
-            "name": "format",
+            "name": "id",
             "in": "path",
             "required": true,
-            "description": "The format of the dataset to retrieve.",
+            "description": "The job id in which employee is interested in",
             "schema": {
-              "type": "string",
-              "enum": [
-                "API",
-                "CSV",
-                "KML",
-                "PDF",
-                "SHP"
-              ]
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "An array of datasets with specified format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "example": {
-                      "organisation": "GovTech",
-                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
-                      "dataset_name": "Data.gov.sg Dataset Listing",
-                      "date_created": "2017-04-03",
-                      "last_updated": "2018-07-02",
-                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
-                      "frequency": "Daily",
-                      "coverage_start": "2018-07-01",
-                      "coverage_end": "2018-07-01",
-                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
-                      "resource_name": "Data.gov.sg Dataset Listing",
-                      "resource_description": "na",
-                      "resource_format": "CSV"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/freq/{freq}": {
-      "get": {
-        "summary": "List all datasets with specific frequency",
-        "tags": [
-          "frequency"
-        ],
-        "parameters": [
-          {
-            "name": "freq",
-            "in": "path",
-            "required": true,
-            "description": "The frequency of the dataset to retrieve.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "Adhoc",
-                "Annual",
-                "Daily",
-                "Half Year",
-                "Monthly",
-                "Other",
-                "Quarterly",
-                "Realtime",
-                "Weekly"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "An array of datasets with specified frequency",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "example": {
-                      "organisation": "GovTech",
-                      "dataset_id": "dba9594b-fb5c-41c5-bb7c-92860ee31aeb",
-                      "dataset_name": "Data.gov.sg Dataset Listing",
-                      "date_created": "2017-04-03",
-                      "last_updated": "2018-07-02",
-                      "description": "This dataset contains a listing of all datasets provided on Data.gov.sg.",
-                      "frequency": "Daily",
-                      "coverage_start": "2018-07-01",
-                      "coverage_end": "2018-07-01",
-                      "resource_id": "85be5dcc-93f6-4d36-ae10-c85b0907948c",
-                      "resource_name": "Data.gov.sg Dataset Listing",
-                      "resource_description": "na",
-                      "resource_format": "CSV"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "interest for job logged"
           }
         }
       }
