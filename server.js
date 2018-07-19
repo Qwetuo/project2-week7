@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3000;
 const mongodb_uri = process.env.MONGODB_URI || "mongodb://localhost:27017/project2"
 
-const seedAdmin = require("./seedData")
-
 mongoose.connect(
   mongodb_uri,
 {useNewUrlParser: true}
