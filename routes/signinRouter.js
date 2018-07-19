@@ -1,10 +1,10 @@
 const express = require("express");
 
 const jwt = require("jsonwebtoken");
+const { jwtOptions } = require("../config/passport");
 const Admin = require("../models/admin");
 const Employee = require("../models/employee");
 const Employer = require("../models/employer");
-const { jwtOptions } = require("../config/passport");
 
 const router = express.Router();
 router.use(express.json());

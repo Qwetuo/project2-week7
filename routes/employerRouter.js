@@ -14,12 +14,12 @@ router.get("/", isEmployer, async (req, res, next) => {
 
 router.put("/", isEmployer, async (req, res, next) => {
   await Employer.findByIdAndUpdate(req.user._id, req.body);
-  res.json({ message: `update for ${req.user.username} successful` });
+  res.status(200).json({ message: `update for ${req.user.username} successful` });
 });
 
 router.delete("/", isEmployer, async (req, res, next) => {
   await Employer.findByIdAndRemove(req.user._id);
-  res.json({ message: `delete account for ${req.user.username} successful` });
+  res.status(200).json({ message: `delete account for ${req.user.username} successful` });
 });
 
 router.post("/posts", isEmployer, async (req, res, next) => {
@@ -47,18 +47,18 @@ router.post("/posts", isEmployer, async (req, res, next) => {
 
 router.get("/posts", isEmployer, async (req, res, next) => {
   const posts = await Posting.find({ employer: req.user._id });
-  res.json(posts);
+  res.status(200).json(posts);
 });
 
 router.get("/posts/:id", isEmployer, async (req, res, next) => {
   const post = await Posting.findById(req.params.id);
-  res.json(post);
+  res.status(200).json(post);
 });
 
 router.put("/posts/:id", isEmployer, async (req, res, next) => {
   try {
     await Posting.findByIdAndUpdate(req.params.id, req.body);
-    res.json({message: `updated book with id ${req.params.id} sucessfully`})
+    res.status(200).json({message: `updated book with id ${req.params.id} sucessfully`})
   } catch (e) {
     next(e)
   }
@@ -67,7 +67,7 @@ router.put("/posts/:id", isEmployer, async (req, res, next) => {
 router.delete("/posts/:id", isEmployer, async (req, res, next) => {
   try {
     await Posting.findByIdAndRemove(req.params.id);
-    res.json({message: `deleted book with id ${req.params.id} sucessfully`})
+    res.status(200).json({message: `deleted book with id ${req.params.id} sucessfully`})
   } catch (e) {
     next(e)
   }

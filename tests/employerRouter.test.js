@@ -1,20 +1,16 @@
 const request = require("supertest");
 const express = require("express");
 
-const employerRouter = require("../routes/employerRouter");
-const signupRouter = require("../routes/signupRouter");
-const signinRouter = require("../routes/signinRouter");
-
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongod = new MongoMemoryServer();
 const mongoose = require("mongoose");
-const Employer = require("../models/employer");
+
+const employerRouter = require("../routes/employerRouter");
 const Posting = require("../models/posting");
+const { getEmployerToken, createEmployee } = require("./test_helper");
 
 const app = express();
 employerRouter(app);
-signupRouter(app);
-signinRouter(app);
 
 let jwtTokenEmployer1;
 let jobId1;
@@ -25,18 +21,7 @@ beforeAll(async () => {
   await mongoose.connect(uri);
 
   const employer1 = { username: "employer100", password: "000000" };
-  await request(app)
-    .post("/signup/employer")
-    .send(employer1);
-
-  let response = await request(app)
-    .post("/signin/employer")
-    .send(employer1);
-  jwtTokenEmployer1 = await response.body.token;
-});
-
-beforeEach(async () => {
-  // mongoose.connection.db.dropDatabase();
+  jwtTokenEmployer1 = await getEmployerToken(employer1);
 });
 
 afterAll(() => {
@@ -52,14 +37,8 @@ test("GET /employer without token should give unauthorized", async () => {
 
 test("GET /employer with employee(wrong) token should inform incorrect authorization", async () => {
   const employeeTest = { username: "employee1000", password: "000000" };
-  await request(app)
-    .post("/signup/employee")
-    .send(employeeTest);
-
-  let getEmployeeToken = await request(app)
-    .post("/signin/employee")
-    .send(employeeTest);
-  const employeeToken = await getEmployeeToken.body.token;
+  const savedEmployee = await createEmployee(employeeTest);
+  const employeeToken = savedEmployee.token;
 
   const response = await request(app)
     .get("/employer")
@@ -117,34 +96,37 @@ test("GET /posts should show all the job posting made by the employer", async ()
 
 test("GET /posts/:id should show the job posting with correct id", async () => {
   const response = await request(app)
-    .get(`/employer/posts/${jobId1.replace(/['"]+/g, '')}`)
+    .get(`/employer/posts/${jobId1.replace(/['"]+/g, "")}`)
     .set("Authorization", "Bearer " + jwtTokenEmployer1);
   expect(response.status).toEqual(200);
-  expect(response.body._id).toEqual(jobId1)
+  expect(response.body._id).toEqual(jobId1);
 });
 
 test("PUT /posts/:id should update job posting", async () => {
   const response = await request(app)
-    .put(`/employer/posts/${jobId1.replace(/['"]+/g, '')}`)
-    .send({pay: "100", desc: "updated description"})
+    .put(`/employer/posts/${jobId1.replace(/['"]+/g, "")}`)
+    .send({ pay: "100", desc: "updated description" })
     .set("Authorization", "Bearer " + jwtTokenEmployer1);
   expect(response.status).toEqual(200);
-  expect(response.body.message).toEqual(`updated book with id ${jobId1} sucessfully`)
+  expect(response.body.message).toEqual(
+    `updated book with id ${jobId1} sucessfully`
+  );
   const posting = await Posting.findById(jobId1).populate("employer");
   expect(posting.employer.username).toEqual("employer100");
   expect(posting.title).toEqual("new job1");
-  expect(posting.pay).toEqual(100)
-  expect(posting.desc).toEqual("updated description")
+  expect(posting.pay).toEqual(100);
+  expect(posting.desc).toEqual("updated description");
 });
 
 test("DELETE /posts/:id should delete the job posting", async () => {
   const response = await request(app)
-    .delete(`/employer/posts/${jobId1.replace(/['"]+/g, '')}`)
+    .delete(`/employer/posts/${jobId1.replace(/['"]+/g, "")}`)
     .set("Authorization", "Bearer " + jwtTokenEmployer1);
   expect(response.status).toEqual(200);
-  expect(response.body.message).toEqual(`deleted book with id ${jobId1} sucessfully`)
-  const postings = await Posting.find()
-  expect(postings.length).toBe(1)
-  expect(postings[0]._id).not.toBe(jobId1)
+  expect(response.body.message).toEqual(
+    `deleted book with id ${jobId1} sucessfully`
+  );
+  const postings = await Posting.find();
+  expect(postings.length).toBe(1);
+  expect(postings[0]._id).not.toBe(jobId1);
 });
-

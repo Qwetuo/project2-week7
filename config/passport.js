@@ -13,11 +13,13 @@ const jwtOptions = {
 };
 
 const jwtStrategy = new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
-  // console.log("payload received", jwt_payload);
-
   let user = await Employee.findOne({ _id: jwt_payload.id });
-  if (!user) {user = await Employer.findOne({ _id: jwt_payload.id })}
-  if (!user) {user = await Admin.findOne({ _id: jwt_payload.id })}
+  if (!user) {
+    user = await Employer.findOne({ _id: jwt_payload.id });
+  }
+  if (!user) {
+    user = await Admin.findOne({ _id: jwt_payload.id });
+  }
 
   if (user) {
     done(null, user);

@@ -17,7 +17,7 @@ const seedDataFn = async () => {
     ];
 
     const savedAdmins = admins.map(admin => {
-      const {username} = admin;
+      const { username } = admin;
       const newAdmin = new Admin({ username, bio: "admin" });
       newAdmin.setPassword(admin.password);
       return newAdmin.save();
@@ -206,4 +206,4 @@ const seedDataFn = async () => {
     });
 };
 
-module.exports = seedDataFn
+module.exports = seedDataFn;

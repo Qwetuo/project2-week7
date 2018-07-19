@@ -12,11 +12,6 @@ router.get("/", async (req, res, next) => {
   res.json(posts);
 });
 
-// router.get("/active", async (req, res, next) => {
-//   const posts = await Posting.find({status: "active"}).populate({path: "employer", select: "coyName"});
-//   res.json(posts);
-// });
-
 router.get("/search", async (req, res, next) => {
   const postings = await Posting.find()
     .populate({ path: "employer", select: "coyName" })

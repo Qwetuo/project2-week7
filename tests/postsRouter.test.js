@@ -3,26 +3,19 @@ const express = require("express");
 
 const employerRouter = require("../routes/employerRouter");
 const postsRouter = require("../routes/postsRouter");
-const signupRouter = require("../routes/signupRouter");
-const signinRouter = require("../routes/signinRouter");
 
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongod = new MongoMemoryServer();
 const mongoose = require("mongoose");
-const Employer = require("../models/employer");
-const Posting = require("../models/posting");
+
+const { getEmployerId, createPost } = require("./test_helper");
 
 const app = express();
 employerRouter(app);
 postsRouter(app);
-signupRouter(app);
-signinRouter(app);
 
-let jwtTokenEmployer1;
-let jwtTokenEmployer2;
-let jobId1;
-let jobId2;
-let jobId3;
+let employerId1;
+let employerId2;
 
 beforeAll(async () => {
   jest.setTimeout(120000);
@@ -34,13 +27,13 @@ beforeAll(async () => {
     password: "000000",
     coyName: "e1 company name"
   };
-  jwtTokenEmployer1 = await getEmployerToken(employer1);
+  employerId1 = await getEmployerId(employer1);
   const employer2 = {
     username: "employer2",
     password: "000000",
     coyName: "e2 company name"
   };
-  jwtTokenEmployer2 = await getEmployerToken(employer2);
+  employerId2 = await getEmployerId(employer2);
 
   const newJob1 = {
     title: "new job1",
@@ -49,7 +42,9 @@ beforeAll(async () => {
     req: "requirements for job 1",
     location: "east",
     type: "others",
-    commitment: ["30072018", "31072018"]
+    commitment: ["30072018", "31072018"],
+    employer: `${employerId1}`,
+    status: "active"
   };
   const newJob2 = {
     title: "new job2",
@@ -58,21 +53,22 @@ beforeAll(async () => {
     req: "requirements for job 2",
     location: "west",
     type: "usher",
-    commitment: ["01012019"]
+    commitment: ["01012019"],
+    employer: `${employerId2}`,
+    status: "active"
   };
   const newJob3 = {
     title: "job3",
     pay: "12",
     location: "east",
-    type: "others"
+    type: "others",
+    employer: `${employerId1}`,
+    status: "active"
   };
-  jobId1 = await createPost(newJob1, jwtTokenEmployer1);
-  jobId2 = await createPost(newJob2, jwtTokenEmployer2);
-  jobId3 = await createPost(newJob3, jwtTokenEmployer1);
-});
 
-beforeEach(async () => {
-  // mongoose.connection.db.dropDatabase();
+  jobId1 = await createPost(newJob1);
+  jobId2 = await createPost(newJob2);
+  jobId3 = await createPost(newJob3);
 });
 
 afterAll(() => {
@@ -126,22 +122,3 @@ test("GET /search should return an array of post that match multiple search", as
   expect(response.body[0].type).toBe("others");
   expect(response.body[0].pay).toBeGreaterThan(10);
 });
-
-const getEmployerToken = async employer => {
-  await request(app)
-    .post("/signup/employer")
-    .send(employer);
-
-  let response = await request(app)
-    .post("/signin/employer")
-    .send({ username: employer.username, password: employer.password });
-  return await response.body.token;
-};
-
-const createPost = async (job, token) => {
-  let response = await request(app)
-    .post("/employer/posts")
-    .send(job)
-    .set("Authorization", "Bearer " + token);
-  return await response.body.job_id;
-};

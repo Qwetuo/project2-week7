@@ -1,49 +1,38 @@
 const express = require("express");
-
-const jwt = require("jsonwebtoken");
-const Admin = require("../models/admin");
-const { jwtOptions } = require("../config/passport");
-
 const router = express.Router();
-router.use(express.json())
+const { passport } = require("../config/passport");
+const { isAdmin } = require("../middlewares/user_auth");
 
-router.get("/", async (req, res, next) => {
-  const admin = await Admin.find();
-  res.json(admin);
+const Employee = require("../models/employee");
+const Employer = require("../models/employer");
+
+router.get("/", isAdmin, (req, res, next) => {
+  res.json({
+    message: "Welcome to the admin homepage",
+    whoami: req.user
+  });
 });
 
-router.post("/signup", async (req, res, next) => {
-  const { username, password } = req.body;
-  const user = new Admin({ username, bio: "admin" });
-  user.setPassword(password);
-  try {
-    await user.save();
-    res.json({ user });
-  } catch (err) {
-    next(err);
-  }
+router.get("/employee", isAdmin, async (req, res, next) => {
+  const employees = await Employee.find();
+  res.json(employees);
 });
 
+router.get("/employee/:name", isAdmin, async (req, res, next) => {
+  const employeeQ = await Employee.findOne({ username: req.params.name });
+  res.json(employeeQ);
+});
 
-router.post("/signin", async (req, res) => {
-  const { username, password } = req.body;
+router.get("/employer", isAdmin, async (req, res, next) => {
+  const employers = await Employer.find();
+  res.json(employers);
+});
 
-  const user = await Admin.findOne({ username: username });
-
-  if (!user) {
-    res.status(401).json({ message: "no such user found" });
-  }
-
-  if (user.validPassword(password)) {
-    const userId = { id: user.id };
-    const token = jwt.sign(userId, jwtOptions.secretOrKey);
-    res.json({ message: "sign in successful", token: token });
-  } else {
-    res.status(401).json({ message: "passwords did not match" });
-  }
+router.get("/employer/:name", isAdmin, async (req, res, next) => {
+  const employerQ = await Employer.findOne({ username: req.params.name });
+  res.json(employerQ);
 });
 
 module.exports = app => {
-  // app.use(express.json())
-  app.use("/admin", router)
-}
+  app.use("/admin", passport.authenticate("jwt", { session: false }), router);
+};

@@ -1,5 +1,6 @@
-const Admin = require("../models/admin")
-const Employer = require("../models/employer")
+const Admin = require("../models/admin");
+const Employer = require("../models/employer");
+const Employee = require("../models/employee");
 
 const isAdmin = (req, res, next) => {
   if (req.user.bio !== "admin") {
@@ -7,9 +8,8 @@ const isAdmin = (req, res, next) => {
       message: "You don't have the correct authorization to view this",
       whoami: req.user
     });
-  // } else if (req.user.bio === "admin") {
   } else if (req.user instanceof Admin) {
-    next()
+    next();
   }
 };
 
@@ -19,24 +19,24 @@ const isEmployer = (req, res, next) => {
       message: "You don't have the correct authorization to view this",
       whoami: req.user
     });
-  // } else if (req.user.bio === "admin") {
   } else if (req.user instanceof Employer) {
-    next()
+    next();
   }
 };
 
-// const isEmployee = (err, req, res, next) => {
-//   if (req.user.bio !== "employee") {
-//     res.json({
-//       message: "Incorrect access.",
-//       whoami: req.user
-//     });
-//   } else if (req.user.bio === "admin") {
-//     next()
-//   }
-// };
+const isEmployee = (req, res, next) => {
+  if (req.user instanceof Employee === false) {
+    res.status(401).json({
+      message: "You don't have the correct authorization to view this",
+      whoami: req.user
+    });
+  } else if (req.user instanceof Employee) {
+    next();
+  }
+};
 
 module.exports = {
   isAdmin,
-  isEmployer
+  isEmployer,
+  isEmployee
 };
