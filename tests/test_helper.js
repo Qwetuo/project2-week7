@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Employer = require("../models/employer");
 const Employee = require("../models/employee");
 const Posting = require("../models/posting");
