@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 var corsOptions = {
-  origin: [/http:\/\/localhost:.*/, /http[s]*:\/\/lendar-prototype.*\.netlify.com/],
+  origin: [/http:\/\/localhost:.*/, /http[s]*:\/\/lendar-prototype.*\.herokuapp.com/],
   credentials: true
 }
 
