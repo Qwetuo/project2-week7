@@ -3,6 +3,21 @@ const Employer = require("./models/employer");
 const Employee = require("./models/employee");
 const Posting = require("./models/posting");
 
+const seedDataIfNeeded = async () => {
+  if (
+    (await Admin.countDocuments()) == 0 &&
+    (await Employer.countDocuments()) == 0 &&
+    (await Employee.countDocuments()) == 0 &&
+    (await Posting.countDocuments()) == 0
+  ) {
+    console.log("database is empty, seeding data");
+    seedDataFn();
+  } else {
+    console.log("database not empty, not seeding data");
+  }
+}
+
+
 const seedDataFn = async () => {
   async function saveAdmins() {
     const admins = [
@@ -206,4 +221,4 @@ const seedDataFn = async () => {
     });
 };
 
-module.exports = seedDataFn;
+module.exports = seedDataIfNeeded;

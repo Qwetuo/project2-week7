@@ -8,46 +8,51 @@ const { isEmployee } = require("../middlewares/user_auth");
 const router = express.Router();
 router.use(express.json());
 
-router.get("/", isEmployee, async (req, res, next) => {
-  res.json(req.user);
+router.get("/", async (req, res, next) => {
+	res.json(req.user);
 });
 
-router.put("/", isEmployee, async (req, res, next) => {
-  await Employee.findByIdAndUpdate(req.user._id, req.body);
-  res.json({ message: `update for ${req.user.username} successful` });
+router.put("/", async (req, res, next) => {
+	await Employee.findByIdAndUpdate(req.user._id, req.body);
+	res.json({ message: `update for ${req.user.username} successful` });
 });
 
-router.delete("/", isEmployee, async (req, res, next) => {
-  await Employee.findByIdAndRemove(req.user._id);
-  res.json({ message: `delete account for ${req.user.username} successful` });
+router.delete("/", async (req, res, next) => {
+	await Employee.findByIdAndRemove(req.user._id);
+	res.json({ message: `delete account for ${req.user.username} successful` });
 });
 
-router.get("/interested", isEmployee, async (req, res, next) => {
-  const posts = await Posting.find();
-  const interestedPost = posts.filter(
-    post => post.interested.indexOf(`${req.user._id}`) !== -1
-  );
-  res.status(200).json(interestedPost);
+router.get("/interested", async (req, res, next) => {
+	const posts = await Posting.find();
+	const interestedPost = posts.filter(post =>
+		isEmployeeInterested(post, req.user._id)
+	);
+	res.status(200).json(interestedPost);
 });
 
-router.put("/interested/:id", isEmployee, async (req, res, next) => {
-  const post = await Posting.findById(req.params.id);
-  if (post.interested.indexOf(`${req.user._id}`) >= 0) {
-    res
-      .status(400)
-      .json({ message: `you have already logged your interested` });
-  } else {
-    await Posting.findByIdAndUpdate(req.params.id, {
-      interested: [...post.interested, req.user._id]
-    });
-    res.status(200).json({ message: `interest for job ${post.title} logged` });
-  }
+router.put("/interested/:id", async (req, res, next) => {
+	const post = await Posting.findById(req.params.id);
+	if (post.interested.indexOf(`${req.user._id}`) >= 0) {
+		res
+			.status(400)
+			.json({ message: `you have already logged your interested` });
+	} else {
+		await Posting.findByIdAndUpdate(req.params.id, {
+			interested: [...post.interested, req.user._id]
+		});
+		res.status(200).json({ message: `interest for job ${post.title} logged` });
+	}
 });
+
+const isEmployeeInterested = (post, userId) => {
+	return post.interested.indexOf(userId.toString()) !== -1;
+};
 
 module.exports = app => {
-  app.use(
-    "/employee",
-    passport.authenticate("jwt", { session: false }),
-    router
-  );
+	app.use(
+		"/employee",
+		passport.authenticate("jwt", { session: false }),
+		isEmployee,
+		router
+	);
 };
