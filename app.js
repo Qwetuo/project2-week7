@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const cors = require("cors")
 
 const indexRouter = require("./routes/indexRouter");
 const adminRouter = require("./routes/adminRouter");
@@ -19,6 +20,13 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
+
+var corsOptions = {
+  origin: [/http:\/\/localhost:.*/, /http[s]*:\/\/lendar-prototype.*\.netlify.com/],
+  credentials: true
+}
+
+app.use(cors(corsOptions))
 
 indexRouter(app);
 signupRouter(app);
