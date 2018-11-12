@@ -1,13 +1,29 @@
-# TW JS Project #2: Lendar-api
+[Lendar's RESTful API](https://lendar-api.herokuapp.com/api-docs)
+ ======
+ This project was built for my boot camp course work as a back-end API to serve the events job portal, Lendar, which can be found on https://github.com/Qwetuo/project1-week4 . You can also visit the partial api documentation at https://lendar-api.herokuapp.com/api-docs .
 
-This is a backend api project that have been built to hopefully support the events job app, Lendar, which can be found on https://github.com/Qwetuo/project1-week4
+ Features
+ -
+* CRUD of user accounts for employers and employees
+* Employer (authenticated) access to CRUD job post (routes)
+* Data management using mLab MongoDB
+* CircleCI & Heroku deployment
 
-#### Features:
+ Created with
+ -
+ * NodeJS
+ * Express
+ * MongoDB (on Heroku mLab)
+ * TDD practice
+ * and automated tests with Jest
+ * Circle CI
+ * Swagger UI
+ * mongoose
+ * passport-jwt
 
-- CRUD of user accounts for employers and employees
-- Employer (authenticated) access to CRUD job post (routes)
-- Data management using mLab MongoDB
-- CircleCI & Heroku deployment
+Created by
+ -
+ Chew Min Zhuang 
 
-### Visit Lendar-api at https://lendar-api.herokuapp.com/
-#### (partial) API-documentation available at https://lendar-api.herokuapp.com/api-docs
+ Have any feedback for my website or code?
+ Contact me at chewminzhuang@hotmail.com 
