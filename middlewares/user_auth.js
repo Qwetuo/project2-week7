@@ -38,7 +38,6 @@ const isEmployee = (req, res, next) => {
 const isCorrespondingEmployer = async (req, res, next) => {
 	let post;
 
-	console.log(req.params.id);
 	try {
 		post = await Posting.findById(req.params.id);
 		if (!post) post = {};
@@ -46,7 +45,6 @@ const isCorrespondingEmployer = async (req, res, next) => {
 		post = {};
 	}
 
-	console.log("HEREEEEE", post, req.user);
 
 	if (post.employer && areIdEqual(post.employer._id, req.user._id)) {
 		return next();
@@ -55,7 +53,6 @@ const isCorrespondingEmployer = async (req, res, next) => {
 };
 
 const areIdEqual = (id1, id2) => {
-	console.log(id1, id2);
 	if (!id1 || !id2) return false;
 	else return id1.toString() == id2.toString();
 };
